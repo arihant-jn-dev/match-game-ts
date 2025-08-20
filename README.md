@@ -2,16 +2,30 @@
 
 A simple browser-based memory game built with TypeScript, HTML, and CSS. No frameworks required.
 
-## How to Run
 
-1. Compile the TypeScript file:
-   
+## How to Run Locally
+
+1. **Install TypeScript (if not already installed):**
+   ```sh
+   npm install -g typescript
+   ```
+
+2. **Compile the TypeScript file:**
    ```sh
    tsc game.ts
    ```
-   (Requires TypeScript installed globally: `npm install -g typescript`)
 
-2. Open `index.html` in your browser.
+3. **Open the game in your browser:**
+   - Double-click `index.html` or open it with your browser.
+   - For best results, use a local server (recommended for Chrome):
+     - With Python 3:
+       ```sh
+       python3 -m http.server 8080
+       ```
+       Then visit [http://localhost:8080](http://localhost:8080)
+     - Or use the Live Server extension in VS Code.
+
+---
 
 ## Features
 - 4x4 grid of cards with emoji icons
