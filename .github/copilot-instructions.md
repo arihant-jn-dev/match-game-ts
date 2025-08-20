@@ -1,0 +1,4 @@
+- [ ] Project scaffolded: Simple browser-based memory game using TypeScript, HTML, and CSS. No frameworks.
+- [ ] Customize the Project: Implement the game logic, UI, and styling.
+- [ ] Compile and test: Ensure the game works in the browser.
+- [ ] Documentation: Add README with instructions.
