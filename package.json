@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "A beautiful memory game with multiple difficulty levels",
   "scripts": {
-    "build": "tsc game.ts",
+    "build": "tsc",
     "dev": "python3 -m http.server 8080"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "files": [
+    "index.html",
+    "style.css",
+    "game.js",
+    "*.js"
+  ]
 }
