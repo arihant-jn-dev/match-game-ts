@@ -8,14 +8,61 @@
 </head>
 <body>
   <div class="game-container">
-    <h1>Match the Pairs</h1>
-    <div class="stats">
-      <span id="pairs-matched">Pairs matched: 0/8</span>
-      <span id="move-counter">Moves: 0</span>
+    <h1 class="game-title">🧠 Match the Pairs</h1>
+    
+    <!-- Level Selection Screen -->
+    <div id="level-selection" class="level-selection">
+      <h2>Choose Your Level</h2>
+      <div class="level-buttons">
+        <button class="level-btn easy" data-level="easy">
+          <span class="level-icon">😊</span>
+          <span class="level-name">Easy</span>
+          <span class="level-desc">4×4 Grid (8 pairs)</span>
+        </button>
+        <button class="level-btn medium" data-level="medium">
+          <span class="level-icon">🤔</span>
+          <span class="level-name">Medium</span>
+          <span class="level-desc">4×8 Grid (16 pairs)</span>
+        </button>
+        <button class="level-btn hard" data-level="hard">
+          <span class="level-icon">🔥</span>
+          <span class="level-name">Hard</span>
+          <span class="level-desc">8×8 Grid (32 pairs)</span>
+        </button>
+      </div>
     </div>
-    <div id="game-board" class="board"></div>
-    <div class="actions">
-      <button id="reset-btn">Reset game</button>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="game-screen hidden">
+      <div class="game-header">
+        <div class="stats">
+          <span id="current-level" class="current-level">Easy</span>
+          <span id="pairs-matched">Pairs matched: 0/8</span>
+          <span id="move-counter">Moves: 0</span>
+          <span id="timer">Time: 00:00</span>
+        </div>
+      </div>
+      <div id="game-board" class="board"></div>
+      <div class="actions">
+        <button id="back-btn" class="back-btn">← Back to Levels</button>
+        <button id="reset-btn" class="reset-btn">Reset Game</button>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>🎉 Congratulations!</h2>
+        <p id="success-message">You completed the game!</p>
+        <div class="success-stats">
+          <div>Moves: <span id="final-moves">0</span></div>
+          <div>Time: <span id="final-time">00:00</span></div>
+        </div>
+        <div class="modal-actions">
+          <button id="play-again-btn" class="play-again-btn">Play Again</button>
+          <button id="change-level-btn" class="change-level-btn">Change Level</button>
+        </div>
+      </div>
     </div>
   </div>
   <script src="game.js" type="module"></script>

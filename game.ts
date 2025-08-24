@@ -1,11 +1,26 @@
-// Match the Pairs Game - TypeScript
+// Match the Pairs Game - TypeScript with Multiple Levels
 // Emoji placeholders for cards
-const icons = [
+const allIcons = [
   '🐶', '🐱', '🦄', '🐙', '🦖', '🐝', '🌱', '👷',
+  '🐸', '🦊', '🐵', '🐧', '🦉', '🐺', '🐯', '🐨',
+  '🐼', '🦁', '🐮', '🐷', '🐰', '🐹', '🐻', '🐳',
+  '🐬', '🐟', '🐠', '🦈', '🦀', '🐛', '🦋', '🌸'
 ];
 
-const boardSize = 4; // 4x4 grid
-const totalPairs = icons.length;
+type Level = 'easy' | 'medium' | 'hard';
+
+interface LevelConfig {
+  rows: number;
+  cols: number;
+  pairs: number;
+  name: string;
+}
+
+const levelConfigs: Record<Level, LevelConfig> = {
+  easy: { rows: 4, cols: 4, pairs: 8, name: '😊 Easy' },
+  medium: { rows: 4, cols: 8, pairs: 16, name: '🤔 Medium' },
+  hard: { rows: 8, cols: 8, pairs: 32, name: '🔥 Hard' }
+};
 
 interface Card {
   id: number;
@@ -14,18 +29,34 @@ interface Card {
   flipped: boolean;
 }
 
+let currentLevel: Level = 'easy';
 let cards: Card[] = [];
 let firstCard: Card | null = null;
 let secondCard: Card | null = null;
 let lockBoard = false;
 let moves = 0;
 let pairsMatched = 0;
+let gameStartTime = 0;
+let timerInterval: number | null = null;
 
+// DOM elements
+const levelSelection = document.getElementById('level-selection')!;
+const gameScreen = document.getElementById('game-screen')!;
 const board = document.getElementById('game-board')!;
 const moveCounter = document.getElementById('move-counter')!;
 const pairsMatchedEl = document.getElementById('pairs-matched')!;
+const currentLevelEl = document.getElementById('current-level')!;
+const timerEl = document.getElementById('timer')!;
 const resetBtn = document.getElementById('reset-btn')!;
+const backBtn = document.getElementById('back-btn')!;
+const successModal = document.getElementById('success-modal')!;
+const successMessage = document.getElementById('success-message')!;
+const finalMoves = document.getElementById('final-moves')!;
+const finalTime = document.getElementById('final-time')!;
+const playAgainBtn = document.getElementById('play-again-btn')!;
+const changeLevelBtn = document.getElementById('change-level-btn')!;;
 
+// Utility functions
 function shuffle<T>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -35,6 +66,8 @@ function shuffle<T>(array: T[]): T[] {
 }
 
 function createCards(): Card[] {
+  const config = levelConfigs[currentLevel];
+  const icons = allIcons.slice(0, config.pairs);
   const doubled = [...icons, ...icons];
   const shuffled = shuffle(doubled);
   return shuffled.map((icon, idx) => ({
@@ -45,11 +78,64 @@ function createCards(): Card[] {
   }));
 }
 
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  const minStr = mins < 10 ? '0' + mins : mins.toString();
+  const secStr = secs < 10 ? '0' + secs : secs.toString();
+  return `${minStr}:${secStr}`;
+}
+
+function startTimer() {
+  gameStartTime = Date.now();
+  timerInterval = window.setInterval(() => {
+    const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+    timerEl.textContent = `Time: ${formatTime(elapsed)}`;
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+function showLevelSelection() {
+  levelSelection.classList.remove('hidden');
+  gameScreen.classList.add('hidden');
+  successModal.classList.add('hidden');
+  stopTimer();
+}
+
+function showGameScreen() {
+  levelSelection.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  successModal.classList.add('hidden');
+}
+
+function showSuccessModal() {
+  const config = levelConfigs[currentLevel];
+  const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+  
+  successMessage.textContent = `You completed ${config.name} level!`;
+  finalMoves.textContent = moves.toString();
+  finalTime.textContent = formatTime(elapsed);
+  
+  successModal.classList.remove('hidden');
+  stopTimer();
+}
+
 function renderBoard() {
+  const config = levelConfigs[currentLevel];
+  board.className = `board ${currentLevel}`;
   board.innerHTML = '';
+  
   cards.forEach(card => {
     const cardEl = document.createElement('div');
-    cardEl.className = 'card' + (card.flipped || card.matched ? ' flipped' : '') + (card.matched ? ' matched' : '');
+    cardEl.className = 'card' + 
+      (card.flipped || card.matched ? ' flipped' : '') + 
+      (card.matched ? ' matched' : '');
     cardEl.dataset.id = card.id.toString();
     cardEl.textContent = card.flipped || card.matched ? card.icon : '';
     cardEl.addEventListener('click', () => handleCardClick(card));
@@ -59,12 +145,20 @@ function renderBoard() {
 
 function handleCardClick(card: Card) {
   if (lockBoard || card.flipped || card.matched) return;
+  
+  // Start timer on first move
+  if (moves === 0) {
+    startTimer();
+  }
+  
   card.flipped = true;
   renderBoard();
+  
   if (!firstCard) {
     firstCard = card;
     return;
   }
+  
   secondCard = card;
   moves++;
   moveCounter.textContent = `Moves: ${moves}`;
@@ -74,22 +168,32 @@ function handleCardClick(card: Card) {
 function checkForMatch() {
   if (!firstCard || !secondCard) return;
   lockBoard = true;
+  
+  const config = levelConfigs[currentLevel];
+  
   if (firstCard.icon === secondCard.icon) {
     firstCard.matched = true;
     secondCard.matched = true;
     pairsMatched++;
-    pairsMatchedEl.textContent = `Pairs matched: ${pairsMatched}/${totalPairs}`;
+    pairsMatchedEl.textContent = `Pairs matched: ${pairsMatched}/${config.pairs}`;
     resetTurn();
-    if (pairsMatched === totalPairs) {
-      setTimeout(() => alert('Congratulations! You matched all pairs!'), 400);
+    
+    if (pairsMatched === config.pairs) {
+      setTimeout(() => showSuccessModal(), 500);
     }
   } else {
+    // Add wrong animation
+    const firstEl = document.querySelector(`[data-id="${firstCard.id}"]`);
+    const secondEl = document.querySelector(`[data-id="${secondCard.id}"]`);
+    firstEl?.classList.add('wrong');
+    secondEl?.classList.add('wrong');
+    
     setTimeout(() => {
       firstCard!.flipped = false;
       secondCard!.flipped = false;
       resetTurn();
       renderBoard();
-    }, 900);
+    }, 1000);
   }
 }
 
@@ -99,19 +203,47 @@ function resetTurn() {
   renderBoard();
 }
 
-function resetGame() {
+function startNewGame(level: Level) {
+  currentLevel = level;
+  const config = levelConfigs[level];
+  
   cards = createCards();
   moves = 0;
   pairsMatched = 0;
+  gameStartTime = 0;
+  
+  // Update UI
+  currentLevelEl.textContent = config.name;
   moveCounter.textContent = 'Moves: 0';
-  pairsMatchedEl.textContent = `Pairs matched: 0/${totalPairs}`;
+  pairsMatchedEl.textContent = `Pairs matched: 0/${config.pairs}`;
+  timerEl.textContent = 'Time: 00:00';
+  
   firstCard = null;
   secondCard = null;
   lockBoard = false;
+  
+  showGameScreen();
   renderBoard();
+  stopTimer();
 }
 
-resetBtn.addEventListener('click', resetGame);
+function resetGame() {
+  stopTimer();
+  startNewGame(currentLevel);
+}
 
-// Initial game setup
-resetGame();
+// Event listeners
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const level = (e.currentTarget as HTMLElement).dataset.level as Level;
+    startNewGame(level);
+  });
+});
+
+resetBtn.addEventListener('click', resetGame);
+backBtn.addEventListener('click', showLevelSelection);
+playAgainBtn.addEventListener('click', resetGame);
+changeLevelBtn.addEventListener('click', showLevelSelection);
+
+// Initialize game
+showLevelSelection();
