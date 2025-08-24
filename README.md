@@ -1,21 +1,49 @@
 # Match the Pairs Game
 
-A simple browser-based memory game built with TypeScript, HTML, and CSS. No frameworks required.
+A beautiful, interactive browser-based memory game built with TypeScript, HTML, and CSS. Features multiple difficulty levels, smooth animations, and a modern UI design.
 
+## 🎮 Game Features
 
-## How to Run Locally
+### **Three Difficulty Levels:**
+- **😊 Easy**: 4×4 grid (8 pairs) - Perfect for beginners
+- **🤔 Medium**: 4×8 grid (16 pairs) - For intermediate players  
+- **🔥 Hard**: 8×8 grid (32 pairs) - Ultimate challenge
+
+### **Enhanced Gameplay:**
+- **Timer** - Track how long it takes to complete each level
+- **Move Counter** - Monitor your efficiency
+- **Success Modal** - Celebrate completion with detailed stats
+- **Level Selection** - Easy navigation between difficulty levels
+- **Reset Functionality** - Start over anytime
+
+### **Beautiful Animations & UI:**
+- **Card Flip Animations** - Smooth 3D card reveals
+- **Match Effects** - Satisfying pulse animations for successful pairs
+- **Wrong Choice Feedback** - Shake animation for incorrect matches
+- **Gradient Backgrounds** - Modern, eye-catching design
+- **Glassmorphism Effects** - Translucent, modern UI elements
+- **Responsive Design** - Works perfectly on mobile and desktop
+- **Hover Effects** - Interactive shimmer animations
+
+## 🚀 How to Run Locally
 
 1. **Install TypeScript (if not already installed):**
    ```sh
    npm install -g typescript
    ```
 
-2. **Compile the TypeScript file:**
+2. **Clone the repository:**
+   ```sh
+   git clone https://github.com/arihant-jn-dev/match-game-ts.git
+   cd match-game-ts
+   ```
+
+3. **Compile the TypeScript file:**
    ```sh
    tsc game.ts
    ```
 
-3. **Open the game in your browser:**
+4. **Open the game in your browser:**
    - Double-click `index.html` or open it with your browser.
    - For best results, use a local server (recommended for Chrome):
      - With Python 3:
@@ -27,19 +55,37 @@ A simple browser-based memory game built with TypeScript, HTML, and CSS. No fram
 
 ---
 
-## Features
-- 4x4 grid of cards with emoji icons
-- Move counter
-- Pairs matched counter
-- Reset button
-- Modern, responsive UI
+## 🎯 How to Play
 
-## Customization
-- Replace emoji in `game.ts` with your own icons or images.
+1. **Choose Your Level** - Select Easy, Medium, or Hard difficulty
+2. **Click Cards** - Flip cards to reveal the hidden emojis
+3. **Find Matches** - Match pairs of identical emojis
+4. **Complete the Board** - Match all pairs to win!
+5. **Track Progress** - Monitor your moves and time
+6. **Celebrate** - Enjoy the completion animation and stats
+
+## 🛠 Customization
+
+- Replace emojis in `game.ts` with your own icons or images
+- Modify difficulty levels by adjusting the `levelConfigs` object
+- Customize animations and colors in `style.css`
+- Add new levels or features as needed
+
+## 📁 Project Structure
+
+```
+match-game-ts/
+├── index.html          # Main HTML structure
+├── style.css           # Enhanced styling and animations
+├── game.ts            # TypeScript game logic
+├── game.js            # Compiled JavaScript (auto-generated)
+├── README.md          # This file
+└── .gitignore         # Git ignore rules
+```
 
 ---
 
-## Deploying to Vercel and Mapping to a Custom Domain (GoDaddy)
+## 🚀 Deploying to Vercel and Mapping to a Custom Domain (GoDaddy)
 
 ### 1. Deploying to Vercel
 
@@ -94,4 +140,29 @@ A simple browser-based memory game built with TypeScript, HTML, and CSS. No fram
 
 ---
 
-Enjoy the game!
+## 🎮 Live Demo
+
+**Coming Soon:** The game will be deployed at `https://game.sumantpro.in`
+
+---
+
+## 🔧 Tech Stack
+
+- **TypeScript** - Type-safe JavaScript for robust game logic
+- **HTML5** - Modern semantic structure
+- **CSS3** - Advanced animations, gradients, and responsive design
+- **Vanilla JavaScript** - No frameworks, pure performance
+
+---
+
+## 🎨 Design Features
+
+- **Modern Glassmorphism** - Translucent, layered UI elements
+- **Gradient Animations** - Dynamic color transitions
+- **3D Card Flips** - Realistic card turning animations
+- **Responsive Layout** - Perfect on any screen size
+- **Accessibility** - Keyboard navigation and screen reader friendly
+
+---
+
+Enjoy the game! 🎉
