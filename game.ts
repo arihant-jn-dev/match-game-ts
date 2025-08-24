@@ -39,22 +39,22 @@ let pairsMatched = 0;
 let gameStartTime = 0;
 let timerInterval: number | null = null;
 
-// DOM elements
-const levelSelection = document.getElementById('level-selection')!;
-const gameScreen = document.getElementById('game-screen')!;
-const board = document.getElementById('game-board')!;
-const moveCounter = document.getElementById('move-counter')!;
-const pairsMatchedEl = document.getElementById('pairs-matched')!;
-const currentLevelEl = document.getElementById('current-level')!;
-const timerEl = document.getElementById('timer')!;
-const resetBtn = document.getElementById('reset-btn')!;
-const backBtn = document.getElementById('back-btn')!;
-const successModal = document.getElementById('success-modal')!;
-const successMessage = document.getElementById('success-message')!;
-const finalMoves = document.getElementById('final-moves')!;
-const finalTime = document.getElementById('final-time')!;
-const playAgainBtn = document.getElementById('play-again-btn')!;
-const changeLevelBtn = document.getElementById('change-level-btn')!;;
+// DOM elements - Initialize after DOM loads
+let levelSelection: HTMLElement;
+let gameScreen: HTMLElement;
+let board: HTMLElement;
+let moveCounter: HTMLElement;
+let pairsMatchedEl: HTMLElement;
+let currentLevelEl: HTMLElement;
+let timerEl: HTMLElement;
+let resetBtn: HTMLElement;
+let backBtn: HTMLElement;
+let successModal: HTMLElement;
+let successMessage: HTMLElement;
+let finalMoves: HTMLElement;
+let finalTime: HTMLElement;
+let playAgainBtn: HTMLElement;
+let changeLevelBtn: HTMLElement;
 
 // Utility functions
 function shuffle<T>(array: T[]): T[] {
@@ -233,17 +233,47 @@ function resetGame() {
 }
 
 // Event listeners
-document.querySelectorAll('.level-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    const level = (e.currentTarget as HTMLElement).dataset.level as Level;
-    startNewGame(level);
+function initializeEventListeners() {
+  // Initialize DOM elements
+  levelSelection = document.getElementById('level-selection')!;
+  gameScreen = document.getElementById('game-screen')!;
+  board = document.getElementById('game-board')!;
+  moveCounter = document.getElementById('move-counter')!;
+  pairsMatchedEl = document.getElementById('pairs-matched')!;
+  currentLevelEl = document.getElementById('current-level')!;
+  timerEl = document.getElementById('timer')!;
+  resetBtn = document.getElementById('reset-btn')!;
+  backBtn = document.getElementById('back-btn')!;
+  successModal = document.getElementById('success-modal')!;
+  successMessage = document.getElementById('success-message')!;
+  finalMoves = document.getElementById('final-moves')!;
+  finalTime = document.getElementById('final-time')!;
+  playAgainBtn = document.getElementById('play-again-btn')!;
+  changeLevelBtn = document.getElementById('change-level-btn')!;
+
+  // Add event listeners
+  document.querySelectorAll('.level-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const level = (e.currentTarget as HTMLElement).dataset.level as Level;
+      startNewGame(level);
+    });
   });
-});
 
-resetBtn.addEventListener('click', resetGame);
-backBtn.addEventListener('click', showLevelSelection);
-playAgainBtn.addEventListener('click', resetGame);
-changeLevelBtn.addEventListener('click', showLevelSelection);
+  resetBtn.addEventListener('click', resetGame);
+  backBtn.addEventListener('click', showLevelSelection);
+  playAgainBtn.addEventListener('click', resetGame);
+  changeLevelBtn.addEventListener('click', showLevelSelection);
+}
 
-// Initialize game
-showLevelSelection();
+// Initialize game when DOM is loaded
+function initGame() {
+  initializeEventListeners();
+  showLevelSelection();
+}
+
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGame);
+} else {
+  initGame();
+}

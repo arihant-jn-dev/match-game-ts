@@ -1,0 +1,12 @@
+{
+  "name": "match-game-ts",
+  "version": "1.0.0",
+  "description": "A beautiful memory game with multiple difficulty levels",
+  "scripts": {
+    "build": "tsc game.ts",
+    "dev": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
